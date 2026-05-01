@@ -1,3 +1,36 @@
+from PIL import Image
+import requests
+from transformers import AutoProcessor, GemmaForConditionalGeneration
+
+# 1. Load the model and processor
+model_id = "google/gemma-4-e4b-it"
+processor = AutoProcessor.from_pretrained(model_id)
+model = GemmaForConditionalGeneration.from_pretrained(model_id)
+
+# 2. Prepare your image and prompt
+url = "https://example.com/sample_image.jpg"
+image = Image.open(requests.get(url, stream=True).raw)
+prompt = "<image>Please extract the text from this document."
+
+# 3. CONFIGURE RESOLUTION: Set token budget here
+# Choose from: 70, 140, 280 (default), 560, or 1120
+token_budget = 560 
+
+# 4. Apply the budget during processing
+inputs = processor(
+    text=prompt,
+    images=image,
+    return_tensors="pt",
+    max_soft_tokens=token_budget  # Key parameter for variable resolution
+)
+
+# 5. Generate response
+output = model.generate(**inputs, max_new_tokens=200)
+print(processor.decode(output[0], skip_special_tokens=True))
+
+
+#############
+
 from transformers import AutoProcessor, Gemma3nForConditionalGeneration
 from PIL import Image
 import requests
