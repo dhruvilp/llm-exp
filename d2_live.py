@@ -48,4 +48,9 @@ How to run itMake sure your package.json includes "type": "module" to support ES
 Ensure your input.d2 file exists in the same folder.
 Start your script in the terminal: `node watch-d2.js`
 
+"Analyze the provided technical inputs. Consolidate duplicates, resolve conflicting definitions, and output a single, unified system map using strictly D2 graph syntax. Do not output markdown text explanations; output only the raw D2 block."
+"segmented the graph into specific layers".
+
+always run the generated D2 string through the @terrastruct/d2 package's d2.compile() function in your Node.js script. 
+If the compiler throws an error, feed the error string back to the LLM and ask it to self-correct its syntax.
 """
